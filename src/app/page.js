@@ -1,10 +1,13 @@
+"use client";
 import Navbar from "./components/Navbar";
+import Post from "./components/Post";
+import Modal from "./components/Modal";
 
 export default function Home() {
   return (
     <>
       <Navbar />
-      <div className="container mx-auto p-4">
+      <div className="container mx-auto p-4 space-y-3 mt-8">
         <h1 className="text-4xl font-bold">Speak your mind</h1>
         <p className="text-lg">
           Welcome to the anonymous blog, where you can share your thoughts without any fear of judgement.
@@ -22,29 +25,38 @@ export default function Home() {
           </select>
 
           {/* create post */}
-          <button className="btn btn-primary w-fit self-end">
-            Create Post
-          </button>
+          <button className="btn btn-primary w-fit self-end" onClick={() => document.getElementById('my_modal_5').showModal()}>Create Post</button>
+          <Modal />
 
         </div>
         <ul>
-          <div class="container px-6 py-10 mx-auto">
-            <h1 class="text-3xl font-semibold capitalize lg:text-4xl">From the blog</h1>
+          <h1 className="text-3xl font-semibold capitalize lg:text-4xl px-6 py-10 mx-auto">From the blog</h1>
+          <div className="flex flex-col container px-6 py-10 mx-auto">
 
-            {/* blog post */}
-            <div class="mt-8 lg:-mx-6 lg:flex lg:items-center">
-              <img class="object-cover w-full lg:mx-6 lg:w-1/2 rounded-xl h-72 lg:h-96" src="https://images.unsplash.com/photo-1590283603385-17ffb3a7f29f?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1470&q=80" alt="" />
+            <Post
+              title="The future of web development"
+              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi."
+              upvotes={10}
+            />
+            <hr className="self-center my-6 border-base-content w-1/2" />
 
-              <div class="mt-6 lg:w-1/2 lg:mt-0 lg:mx-6 ">
-                <a href="#" class="block mt-4 text-2xl font-semibold md:text-3xl">
-                  All the features you want to know
-                </a>
-                <p class="mt-3 text-sm text-base-content md:text-sm">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Iure veritatis sint autem nesciunt,
-                  laudantium quia tempore delect
-                </p>
-              </div>
-            </div>
+            <Post
+              title="The future of web development"
+              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi."
+              upvotes={10}
+            />
+            <hr className="self-center my-6 border-base-content w-1/2" />            <Post
+              title="The future of web development"
+              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi."
+              upvotes={10}
+            />
+            <hr className="self-center my-6 border-base-content w-1/2" />            <Post
+              title="The future of web development"
+              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi."
+              upvotes={10}
+            />
+            <hr className="self-center my-6 border-base-content w-1/2" />
+
           </div>
         </ul>
       </div>
