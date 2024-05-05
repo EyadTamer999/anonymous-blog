@@ -20,7 +20,7 @@ const modal = () => {
                     </div>
                     <div className="form-control">
                         <label className="label">
-                            <span className="label-text">Image URL</span>
+                            <span className="label-text">Image</span>
                         </label>
                         <input type="file" className="file-input w-full" />
                     </div>
