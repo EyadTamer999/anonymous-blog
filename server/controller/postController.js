@@ -94,7 +94,6 @@ const postController = {
     },
 
     // Upvote a post
-    // TODO test this endpoint
     upvotePost: async (req, res) => {
         const { postId } = req.params
 
@@ -119,7 +118,6 @@ const postController = {
     },
 
     // Downvote a post
-    // TODO test this endpoint
     downvotePost: async (req, res) => {
         const { postId } = req.params
 
@@ -144,7 +142,6 @@ const postController = {
     },
 
     // Delete a post
-    // TODO test this endpoint
     deletePost: async (req, res) => {
         const { postId } = req.params
 
