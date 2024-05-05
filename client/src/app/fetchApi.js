@@ -7,6 +7,7 @@ export const createPost = async (title, description, img) => {
     formData.append("title", title)
     formData.append("description", description)
     formData.append("img", img)
+    console.log("Create post")
     try {
         const response = await axios.post(apiURL + "/api/post/", formData)
         return response.data

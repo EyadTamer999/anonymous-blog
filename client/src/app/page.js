@@ -8,6 +8,7 @@ import { getAllPosts } from './fetchApi'
 export default function Home() {
 
   const [posts, setPosts] = useState([]);
+  const [filter, setFilter] = useState("All")
 
   useEffect(() => {
     getAllPosts().then(data => {
@@ -31,7 +32,7 @@ export default function Home() {
       <div className="container flex flex-col mx-auto p-4">
         <div className="flex justify-between">
           {/* filter */}
-          <select className="self-start select select-bordered w-52">
+          <select className="select select-bordered w-1/4" onChange={(e) => setFilter(e.target.value)}>
             <option>All</option>
             <option>Recent</option>
             <option>Popular</option>
@@ -46,17 +47,17 @@ export default function Home() {
           <h1 className="text-3xl font-semibold capitalize lg:text-4xl px-6 py-10 mx-auto">From the blog</h1>
           <div className="flex flex-col container px-6 py-10 mx-auto">
 
-            {posts.map((post, index) => (
-              <Post
-                key={index}
-                title={post.title}
-                img={post.img}
-                description={post.description}
-                upvotes={post.upvotes}
-              />
+            {filter === "All" && posts.map(post => (
+              <Post key={post.postId} title={post.title} description={post.description} upvotes={post.upvotes} img={post.img} />
             ))}
 
-            <hr className="self-center my-6 border-base-content w-1/2" />
+            {filter === "Recent" && posts.sort((a, b) => new Date(b.date) - new Date(a.date)).map(post => (
+              <Post key={post.postId} title={post.title} description={post.description} upvotes={post.upvotes} img={post.img} />
+            ))}
+
+            {filter === "Popular" && posts.sort((a, b) => b.upvotes - a.upvotes).map(post => (
+              <Post key={post.postId} title={post.title} description={post.description} upvotes={post.upvotes} img={post.img} />
+            ))}
 
           </div>
         </ul>
