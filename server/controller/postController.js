@@ -20,6 +20,22 @@ const uploadToS3 = async (img) => {
     }
 }
 
+// Function to delete image from S3 bucket
+const deleteFromS3 = async (params) => {
+    const data = await documentClient.get(params).promise()
+    const img = data.Item.img
+    const imgKey = img.split("/").pop()
+    const s3Params = {
+        Bucket: process.env.S3_BUCKET,
+        Key: imgKey
+    }
+    try {
+        await s3.deleteObject(s3Params).promise()
+    } catch (err) {
+        res.status(500).json({ message: err })
+    }
+}
+
 const postController = {
 
     // Get all posts
@@ -71,6 +87,78 @@ const postController = {
         }
     },
 
+    // Upvote a post
+    // TODO test this endpoint
+    upvotePost: async (req, res) => {
+        const { postId } = req.params
+
+        const params = {
+            TableName: process.env.DYNAMODB_TABLE,
+            Key: {
+                postId: Number(postId)
+            },
+            UpdateExpression: "set upvotes = upvotes + :val",
+            ExpressionAttributeValues: {
+                ":val": 1
+            },
+            ReturnValues: "UPDATED_NEW"
+        }
+
+        try {
+            const data = await documentClient.update(params).promise()
+            res.status(200).json(data)
+        } catch (err) {
+            res.status(500).json({ message: err })
+        }
+    },
+
+    // Downvote a post
+    // TODO test this endpoint
+    downvotePost: async (req, res) => {
+        const { postId } = req.params
+
+        const params = {
+            TableName: process.env.DYNAMODB_TABLE,
+            Key: {
+                postId: Number(postId)
+            },
+            UpdateExpression: "set upvotes = upvotes - :val",
+            ExpressionAttributeValues: {
+                ":val": 1
+            },
+            ReturnValues: "UPDATED_NEW"
+        }
+
+        try {
+            const data = await documentClient.update(params).promise()
+            res.status(200).json(data)
+        } catch (err) {
+            res.status(500).json({ message: err })
+        }
+    },
+
+    // Delete a post
+    // TODO test this endpoint
+    deletePost: async (req, res) => {
+        const { postId } = req.params
+
+        const params = {
+            TableName: process.env.DYNAMODB_TABLE,
+            Key: {
+                postId: Number(postId)
+            }
+        }
+
+        // delete image from S3 bucket
+        await deleteFromS3(params)
+
+        try {
+            await documentClient.delete(params).promise()
+            res.status(200).json({ message: "Post deleted successfully" })
+        } catch (err) {
+            res.status(500).json({ message: err })
+        }
+    },
 }
 
 module.exports = { postController }
