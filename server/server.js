@@ -2,6 +2,7 @@ const express = require('express');
 const bodyParser = require("body-parser");
 const cors = require("cors");
 require('dotenv').config();
+const fileUpload = require('express-fileupload');
 
 
 // Routes
@@ -21,9 +22,10 @@ const app = express();
 app.use(express.json());
 app.use(cors(corsOptions));
 app.use(bodyParser.json());
+app.use(fileUpload());
 
 //Routes
-app.use("/api/post", postRouter);
+app.use("/post", postRouter);
 
 
 // Start the server
