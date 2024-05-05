@@ -1,6 +1,19 @@
 import React from 'react'
+import { deletePost } from '../fetchApi'
 
-const post = ({ title, description, upvotes, img }) => {
+
+const post = ({ title, description, upvotes, img, postId }) => {
+
+    const deletePostButton = async (e) => {
+
+
+        const response = await deletePost(postId)
+        console.log(response)
+        window.location.reload()
+
+    }
+
+
     return (
         < div className="mt-8 lg:-mx-6 lg:flex lg:items-center" >
             <img className="object-cover w-full lg:mx-6 lg:w-1/2 rounded-xl h-72 lg:h-96" src={img} alt="" />
@@ -21,7 +34,7 @@ const post = ({ title, description, upvotes, img }) => {
                 </div>
 
                 <div className="flex items-center mt-6 space-x-4">
-                    <button className="btn btn-sm btn-primary">Delete</button>
+                    <button onClick={deletePostButton} className="btn btn-sm btn-primary">Delete</button>
                 </div>
 
             </div>

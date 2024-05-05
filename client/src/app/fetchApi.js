@@ -27,3 +27,24 @@ export const getAllPosts = async () => {
         console.log(err)
     }
 }
+
+
+export const upvotePost = async (postId) => {
+    console.log("Upvote post")
+    try {
+        const response = await axios.put(apiURL + "/api/post/upvote/" + postId)
+        return response.data
+    } catch (err) {
+        console.log(err)
+    }
+}
+
+export const deletePost = async (postId) => {
+    console.log("Delete post")
+    try {
+        const response = await axios.delete(apiURL + "/api/post/" + postId)
+        return response.data
+    } catch (err) {
+        console.log(err)
+    }
+}

@@ -3,10 +3,10 @@ const documentClient = require('../Services/awsServices').documentClient
 
 
 // Function to upload image to S3 bucket
-const uploadToS3 = async (img) => {
+const uploadToS3 = async (img, postId) => {
     const params = {
         Bucket: process.env.S3_BUCKET,
-        Key: img.name,
+        Key: postId + img.name,
         Body: img.data,
     }
     try {
@@ -64,8 +64,10 @@ const postController = {
             return res.status(400).json({ message: "Please fill all the fields" })
         }
 
+        const postId = Number(Date.now().toString())
+
         //push the image to S3 bucket and get URL
-        const imgUrl = await uploadToS3(img);
+        const imgUrl = await uploadToS3(img, postId);
 
         // get the current date
         const date = new Date().toISOString()
@@ -74,7 +76,7 @@ const postController = {
         const params = {
             TableName: process.env.DYNAMODB_TABLE,
             Item: {
-                postId: Number(Date.now().toString()),
+                postId: postId,
                 title: title,
                 description: description,
                 date: date,
