@@ -39,6 +39,16 @@ export const upvotePost = async (postId) => {
     }
 }
 
+export const downvotePost = async (postId) => {
+    console.log("Downvote post")
+    try {
+        const response = await axios.put(apiURL + "/api/post/downvote/" + postId)
+        return response.data
+    } catch (err) {
+        console.log(err)
+    }
+}
+
 export const deletePost = async (postId) => {
     console.log("Delete post")
     try {
