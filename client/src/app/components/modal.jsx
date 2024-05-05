@@ -10,6 +10,11 @@ const modal = () => {
 
 
     const submitPost = async (e) => {
+
+        if (!data.title || !data.description || !data.img) {
+            alert("Please fill all the fields")
+            return
+        }
         e.preventDefault()
         console.log(data)
         setLoading(true)
@@ -17,44 +22,55 @@ const modal = () => {
         console.log(response)
         setLoading(false)
         document.getElementById('my_modal_5').close()
+        setData({ title: "", description: "", img: "" })
+        window.location.reload()
     }
 
 
     return (
-        <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
-            <div className="modal-box">
-                <h3 className="font-bold text-lg">Create Post!</h3>
-                <div className="space-y-3">
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Title</span>
-                        </label>
-                        <input onChange={(e) => setData({ ...data, title: e.target.value })} type="text" placeholder="Title" className="input input-bordered" />
-                    </div>
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Description</span>
-                        </label>
-                        <textarea onChange={(e) => setData({ ...data, description: e.target.value })} placeholder="Description" className="textarea textarea-bordered"></textarea>
-                    </div>
-                    <div className="form-control">
-                        <label className="label">
-                            <span className="label-text">Image</span>
-                        </label>
-                        <input onChange={(e) => setData({ ...data, img: e.target.files[0] })} type="file" placeholder="Image" className="input input-bordered" />
-                    </div>
+        <>
+            <dialog id="my_modal_5" className="modal modal-bottom sm:modal-middle">
+                <div className="flex flex-col modal-box">
+                    {loading ?
+                        <span className="self-center loading loading-bars loading-lg"></span>
+                        :
+                        <>
+                            <h3 className="font-bold text-lg">Create Post!</h3>
+                            <div className="space-y-3">
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Title</span>
+                                    </label>
+                                    <input onChange={(e) => setData({ ...data, title: e.target.value })} type="text" placeholder="Title" className="input input-bordered" />
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Description</span>
+                                    </label>
+                                    <textarea onChange={(e) => setData({ ...data, description: e.target.value })} placeholder="Description" className="textarea textarea-bordered"></textarea>
+                                </div>
+                                <div className="form-control">
+                                    <label className="label">
+                                        <span className="label-text">Image</span>
+                                    </label>
+                                    <input onChange={(e) => setData({ ...data, img: e.target.files[0] })} type="file" placeholder="Image" className="input input-bordered" />
+                                </div>
+                            </div>
+                            <div className="modal-action">
+                                <form method="dialog w-full">
+                                    <div className="space-x-4">
+                                        <button onClick={submitPost} className="btn btn-primary">Create</button>
+                                        <button className="btn btn-accent">Close</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </>
+                    }
                 </div>
-                <div className="modal-action">
-                    <form method="dialog w-full">
-                        <div className="space-x-4">
-                            <button onClick={submitPost} className="btn btn-primary">Create</button>
-                            <button className="btn btn-accent">Close</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </dialog>
+            </dialog>
+        </>
     )
+
 }
 
 export default modal

@@ -13,7 +13,7 @@ export default function Home() {
   useEffect(() => {
     getAllPosts().then(data => {
       console.log(data)
-      setPosts(data.Items)
+      setPosts(data.Items) ? data.Items : []
     })
 
   }, [])
@@ -46,6 +46,8 @@ export default function Home() {
         <ul>
           <h1 className="text-3xl font-semibold capitalize lg:text-4xl px-6 py-10 mx-auto">From the blog</h1>
           <div className="flex flex-col container px-6 py-10 mx-auto">
+
+            {posts.length === 0 && <h1 className="text-2xl font-semibold text-center">No posts to show</h1>}
 
             {filter === "All" && posts.map(post => (
               <Post key={post.postId} title={post.title} description={post.description} upvotes={post.upvotes} img={post.img} />

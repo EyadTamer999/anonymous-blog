@@ -60,6 +60,10 @@ const postController = {
         const { title, description } = req.body
         const img = req.files.img
 
+        if (!title || !description || !img) {
+            return res.status(400).json({ message: "Please fill all the fields" })
+        }
+
         //push the image to S3 bucket and get URL
         const imgUrl = await uploadToS3(img);
 
