@@ -25,7 +25,7 @@ app.use(bodyParser.json());
 app.use(fileUpload());
 
 //Routes
-app.use("/post", postRouter);
+app.use("/api/post", postRouter);
 
 
 // Start the server

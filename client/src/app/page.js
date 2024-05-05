@@ -2,8 +2,21 @@
 import Navbar from "./components/Navbar";
 import Post from "./components/Post";
 import Modal from "./components/Modal";
+import { useEffect, useState } from "react";
+import { getAllPosts } from './fetchApi'
 
 export default function Home() {
+
+  const [posts, setPosts] = useState([]);
+
+  useEffect(() => {
+    getAllPosts().then(data => {
+      console.log(data)
+      setPosts(data.Items)
+    })
+
+  }, [])
+
   return (
     <>
       <Navbar />
@@ -33,28 +46,16 @@ export default function Home() {
           <h1 className="text-3xl font-semibold capitalize lg:text-4xl px-6 py-10 mx-auto">From the blog</h1>
           <div className="flex flex-col container px-6 py-10 mx-auto">
 
-            <Post
-              title="The future of web development"
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi."
-              upvotes={10}
-            />
-            <hr className="self-center my-6 border-base-content w-1/2" />
+            {posts.map((post, index) => (
+              <Post
+                key={index}
+                title={post.title}
+                img={post.img}
+                description={post.description}
+                upvotes={post.upvotes}
+              />
+            ))}
 
-            <Post
-              title="The future of web development"
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi."
-              upvotes={10}
-            />
-            <hr className="self-center my-6 border-base-content w-1/2" />            <Post
-              title="The future of web development"
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi."
-              upvotes={10}
-            />
-            <hr className="self-center my-6 border-base-content w-1/2" />            <Post
-              title="The future of web development"
-              description="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Integer nec odio. Praesent libero. Sed cursus ante dapibus diam. Sed nisi."
-              upvotes={10}
-            />
             <hr className="self-center my-6 border-base-content w-1/2" />
 
           </div>
