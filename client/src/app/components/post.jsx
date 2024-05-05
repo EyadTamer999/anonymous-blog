@@ -20,6 +20,10 @@ const post = ({ title, description, upvotes, img }) => {
                     </div>
                 </div>
 
+                <div className="flex items-center mt-6 space-x-4">
+                    <button className="btn btn-sm btn-primary">Delete</button>
+                </div>
+
             </div>
         </div >
     )

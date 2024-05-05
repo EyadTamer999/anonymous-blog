@@ -35,7 +35,9 @@ const modal = () => {
                         <span className="self-center loading loading-bars loading-lg"></span>
                         :
                         <>
-                            <h3 className="font-bold text-lg">Create Post!</h3>
+                            <span className="font-bold text-lg">
+                                Create Post!
+                            </span>
                             <div className="space-y-3">
                                 <div className="form-control">
                                     <label className="label">
