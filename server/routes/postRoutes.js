@@ -6,6 +6,7 @@ const { postController } = require("../controller/postController")
 router.get("/", postController.getAllPosts)
 router.post("/", postController.createPost)
 router.put("/upvote/:postId", postController.upvotePost)
+router.put("/downvote/:postId", postController.downvotePost)
 router.delete("/:postId", postController.deletePost)
 
 
