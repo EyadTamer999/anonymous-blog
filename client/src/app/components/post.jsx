@@ -7,14 +7,14 @@ const post = ({ title, description, upvotes, img, postId }) => {
     const upvotePostButton = async (e) => {
         const response = await upvotePost(postId)
         console.log(response)
-        window.location.reload()
+        // window.location.reload()
 
     }
 
     const downvotePostButton = async (e) => {
         const response = await downvotePost(postId)
         console.log(response)
-        window.location.reload()
+        // window.location.reload()
 
     }
 

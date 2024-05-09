@@ -4,6 +4,7 @@ import Post from "./components/post";
 import Modal from "./components/modal";
 import { useEffect, useState } from "react";
 import { getAllPosts } from './fetchApi'
+import { v4 as uuidv4 } from "uuid";
 
 export default function Home() {
 
@@ -12,6 +13,14 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
+
+    // create a unique id for the user if not already present
+    if (!localStorage.getItem("userId")) {
+      localStorage.setItem("userId", uuidv4())
+    }
+
+    console.log("userid", localStorage.getItem("userId"))
+
     getAllPosts().then(data => {
       console.log(data)
       setPosts(data.Items) ? data.Items : []

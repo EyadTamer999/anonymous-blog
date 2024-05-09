@@ -57,7 +57,7 @@ const postController = {
     createPost: async (req, res) => {
 
         // get the title and description from the request body
-        const { title, description } = req.body
+        const { title, description, userId } = req.body
         const img = req.files.img
 
         if (!title || !description || !img) {
@@ -77,10 +77,12 @@ const postController = {
             TableName: process.env.DYNAMODB_TABLE,
             Item: {
                 postId: postId,
+                userId: userId,
                 title: title,
                 description: description,
                 date: date,
                 upvotes: 0,
+                usersVoted: [],
                 img: imgUrl
             }
         }
@@ -96,15 +98,19 @@ const postController = {
     // Upvote a post
     upvotePost: async (req, res) => {
         const { postId } = req.params
+        const { userId } = req.body
 
+        //if userId already exists in the usersVoted array, return already upvoted, else upvote the post
         const params = {
             TableName: process.env.DYNAMODB_TABLE,
             Key: {
                 postId: Number(postId)
             },
-            UpdateExpression: "set upvotes = upvotes + :val",
+            UpdateExpression: "set upvotes = upvotes + :val, usersVoted = list_append(usersVoted, :userId)",
+            ConditionExpression: "attribute_not_exists(usersVoted[:userId])",
             ExpressionAttributeValues: {
-                ":val": 1
+                ":val": 1,
+                ":userId": [userId]
             },
             ReturnValues: "UPDATED_NEW"
         }
@@ -120,15 +126,19 @@ const postController = {
     // Downvote a post
     downvotePost: async (req, res) => {
         const { postId } = req.params
+        const { userId } = req.body
 
+        //if userId already exists in the usersVoted array, return already downvoted, else downvote the post
         const params = {
             TableName: process.env.DYNAMODB_TABLE,
             Key: {
                 postId: Number(postId)
             },
-            UpdateExpression: "set upvotes = upvotes - :val",
+            UpdateExpression: "set upvotes = upvotes - :val, usersVoted = list_append(usersVoted, :userId)",
+            ConditionExpression: "attribute_not_exists(usersVoted[:userId])",
             ExpressionAttributeValues: {
-                ":val": 1
+                ":val": 1,
+                ":userId": [userId]
             },
             ReturnValues: "UPDATED_NEW"
         }
@@ -144,12 +154,21 @@ const postController = {
     // Delete a post
     deletePost: async (req, res) => {
         const { postId } = req.params
+        const { userId } = req.body
 
+        // if the userId is not the same as the userId of the post, return unauthorized
         const params = {
             TableName: process.env.DYNAMODB_TABLE,
             Key: {
                 postId: Number(postId)
             }
+        }
+
+        const data = await documentClient.get(params).promise()
+        // console.log(req.body)
+        console.log(data)
+        if (data.Item.userId !== userId) {
+            return res.status(401).json({ message: "Unauthorized" })
         }
 
         // delete image from S3 bucket
