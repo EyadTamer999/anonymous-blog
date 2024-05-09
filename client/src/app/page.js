@@ -64,15 +64,15 @@ export default function Home() {
               <>
 
                 {filter === "All" && posts.map(post => (
-                  <Post key={post.postId} postId={post.postId} title={post.title} description={post.description} upvotes={post.upvotes} img={post.img} />
+                  <Post key={post.postId} postId={post.postId} title={post.title} description={post.description} upvotes={post.upvotes} usersVoted={post.usersVoted} userId={post.userId} img={post.img} />
                 ))}
 
                 {filter === "Recent" && posts.sort((a, b) => new Date(b.date) - new Date(a.date)).map(post => (
-                  <Post key={post.postId} postId={post.postId} title={post.title} description={post.description} upvotes={post.upvotes} img={post.img} />
+                  <Post key={post.postId} postId={post.postId} title={post.title} description={post.description} upvotes={post.upvotes} usersVoted={post.usersVoted} userId={post.userId} img={post.img} />
                 ))}
 
                 {filter === "Popular" && posts.sort((a, b) => b.upvotes - a.upvotes).map(post => (
-                  <Post key={post.postId} postId={post.postId} title={post.title} description={post.description} upvotes={post.upvotes} img={post.img} />
+                  <Post key={post.postId} postId={post.postId} title={post.title} description={post.description} upvotes={post.upvotes} usersVoted={post.usersVoted} userId={post.userId} img={post.img} />
                 ))}
 
                 {posts.length === 0 && <h1 className="text-2xl font-semibold text-center">No posts to show</h1>}

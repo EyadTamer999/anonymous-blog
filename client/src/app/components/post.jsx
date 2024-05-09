@@ -2,19 +2,19 @@ import React from 'react'
 import { deletePost, downvotePost, upvotePost } from '../fetchApi'
 
 
-const post = ({ title, description, upvotes, img, postId }) => {
+const post = ({ title, description, upvotes, img, postId, userId, usersVoted }) => {
 
     const upvotePostButton = async (e) => {
         const response = await upvotePost(postId)
         console.log(response)
-        // window.location.reload()
+        window.location.reload()
 
     }
 
     const downvotePostButton = async (e) => {
         const response = await downvotePost(postId)
         console.log(response)
-        // window.location.reload()
+        window.location.reload()
 
     }
 
@@ -40,16 +40,28 @@ const post = ({ title, description, upvotes, img, postId }) => {
                     {description}
                 </p>
                 <div className="flex items-center mt-6 space-x-4">
-                    <button onClick={upvotePostButton} className="btn btn-sm btn-success btn-outline">Upvote</button>
-                    <button onClick={downvotePostButton} className="btn btn-sm btn-accent btn-outline">Downvote</button>
+
+                    {usersVoted.includes(userId) ?
+                        <>
+                            <button onClick={upvotePostButton} className="btn btn-sm btn-disabled">Upvote</button>
+                            <button onClick={downvotePostButton} className="btn btn-sm btn-disabled">Downvote</button>
+                        </>
+                        :
+                        <>
+                            <button onClick={upvotePostButton} className="btn btn-sm btn-success">Upvote</button>
+                            <button onClick={downvotePostButton} className="btn btn-sm btn-accent btn-outline">Downvote</button>
+                        </>
+                    }
                     <div className="flex items-center space-x-2 font-extralight">
                         <label>Upvotes: {upvotes}</label>
                     </div>
                 </div>
 
-                <div className="flex items-center mt-6 space-x-4">
-                    <button onClick={deletePostButton} className="btn btn-sm btn-primary">Delete</button>
-                </div>
+                {userId === localStorage.getItem("userId") &&
+                    <div className="flex items-center mt-6 space-x-4">
+                        <button onClick={deletePostButton} className="btn btn-sm btn-primary">Delete</button>
+                    </div>
+                }
 
             </div>
         </div >
