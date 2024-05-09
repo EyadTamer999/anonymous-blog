@@ -13,20 +13,16 @@ export default function Home() {
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-
     // create a unique id for the user if not already present
     if (!localStorage.getItem("userId")) {
       localStorage.setItem("userId", uuidv4())
     }
-
-    console.log("userid", localStorage.getItem("userId"))
-
     getAllPosts().then(data => {
-      console.log(data)
       setPosts(data.Items) ? data.Items : []
     })
 
-    setLoading(false)
+    setTimeout(() =>
+      setLoading(false), 1000)
 
   }, [])
 
@@ -74,10 +70,10 @@ export default function Home() {
                 {filter === "Popular" && posts.sort((a, b) => b.upvotes - a.upvotes).map(post => (
                   <Post key={post.postId} postId={post.postId} title={post.title} description={post.description} upvotes={post.upvotes} usersVoted={post.usersVoted} userId={post.userId} img={post.img} />
                 ))}
-
-                {posts.length === 0 && <h1 className="text-2xl font-semibold text-center">No posts to show</h1>}
               </>
             }
+
+            {!loading && posts.length === 0 && <h1 className="text-2xl font-semibold text-center">No posts to show</h1>}
 
           </div>
         </ul>

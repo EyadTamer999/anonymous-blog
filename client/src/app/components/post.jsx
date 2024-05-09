@@ -5,6 +5,7 @@ import { deletePost, downvotePost, upvotePost } from '../fetchApi'
 const post = ({ title, description, upvotes, img, postId, userId, usersVoted }) => {
 
     const upvotePostButton = async (e) => {
+        e.preventDefault()
         const response = await upvotePost(postId)
         console.log(response)
         window.location.reload()
@@ -12,6 +13,7 @@ const post = ({ title, description, upvotes, img, postId, userId, usersVoted }) 
     }
 
     const downvotePostButton = async (e) => {
+        e.preventDefault()
         const response = await downvotePost(postId)
         console.log(response)
         window.location.reload()
@@ -19,8 +21,7 @@ const post = ({ title, description, upvotes, img, postId, userId, usersVoted }) 
     }
 
     const deletePostButton = async (e) => {
-
-
+        e.preventDefault()
         const response = await deletePost(postId)
         console.log(response)
         window.location.reload()
@@ -41,7 +42,7 @@ const post = ({ title, description, upvotes, img, postId, userId, usersVoted }) 
                 </p>
                 <div className="flex items-center mt-6 space-x-4">
 
-                    {usersVoted.includes(userId) ?
+                    {usersVoted.includes(localStorage.getItem("userId")) ?
                         <>
                             <button onClick={upvotePostButton} className="btn btn-sm btn-disabled">Upvote</button>
                             <button onClick={downvotePostButton} className="btn btn-sm btn-disabled">Downvote</button>
