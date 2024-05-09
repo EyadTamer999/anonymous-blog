@@ -97,57 +97,88 @@ const postController = {
 
     // Upvote a post
     upvotePost: async (req, res) => {
-        const { postId } = req.params
-        const { userId } = req.body
-
-        //if userId already exists in the usersVoted array, return already upvoted, else upvote the post
-        const params = {
-            TableName: process.env.DYNAMODB_TABLE,
-            Key: {
-                postId: Number(postId)
-            },
-            UpdateExpression: "set upvotes = upvotes + :val, usersVoted = list_append(usersVoted, :userId)",
-            ConditionExpression: "attribute_not_exists(usersVoted[:userId])",
-            ExpressionAttributeValues: {
-                ":val": 1,
-                ":userId": [userId]
-            },
-            ReturnValues: "UPDATED_NEW"
-        }
+        const { postId } = req.params;
+        const { userId } = req.body;
 
         try {
-            const data = await documentClient.update(params).promise()
-            res.status(200).json(data)
+            // Retrieve the item from DynamoDB first
+            const getItemParams = {
+                TableName: process.env.DYNAMODB_TABLE,
+                Key: {
+                    postId: Number(postId)
+                }
+            };
+            const { Item } = await documentClient.get(getItemParams).promise();
+
+            // Check if userId already exists in usersVoted
+            if (Item && Item.usersVoted && Item.usersVoted.includes(userId)) {
+                return res.status(400).json({ message: "User already upvoted this post." });
+            }
+
+            // Perform update if user hasn't voted
+            const updateParams = {
+                TableName: process.env.DYNAMODB_TABLE,
+                Key: {
+                    postId: Number(postId)
+                },
+                UpdateExpression: "SET upvotes = upvotes + :val, usersVoted = list_append(usersVoted, :userId)",
+                ExpressionAttributeValues: {
+                    ":val": 1,
+                    ":userId": [userId]
+                },
+                ReturnValues: "UPDATED_NEW"
+            };
+
+            const data = await documentClient.update(updateParams).promise();
+            res.status(200).json(data);
+
         } catch (err) {
-            res.status(500).json({ message: err })
+            console.error("Error:", err);
+            res.status(500).json({ message: "Internal Server Error" });
         }
     },
 
     // Downvote a post
     downvotePost: async (req, res) => {
-        const { postId } = req.params
-        const { userId } = req.body
-
-        //if userId already exists in the usersVoted array, return already downvoted, else downvote the post
-        const params = {
-            TableName: process.env.DYNAMODB_TABLE,
-            Key: {
-                postId: Number(postId)
-            },
-            UpdateExpression: "set upvotes = upvotes - :val, usersVoted = list_append(usersVoted, :userId)",
-            ConditionExpression: "attribute_not_exists(usersVoted[:userId])",
-            ExpressionAttributeValues: {
-                ":val": 1,
-                ":userId": [userId]
-            },
-            ReturnValues: "UPDATED_NEW"
-        }
+        const { postId } = req.params;
+        const { userId } = req.body;
 
         try {
-            const data = await documentClient.update(params).promise()
-            res.status(200).json(data)
+            // Retrieve the item from DynamoDB first
+            const getItemParams = {
+                TableName: process.env.DYNAMODB_TABLE,
+                Key: {
+                    postId: Number(postId)
+                }
+            };
+
+            const { Item } = await documentClient.get(getItemParams).promise();
+
+            // Check if userId already exists in usersVoted
+            if (Item && Item.usersVoted && Item.usersVoted.includes(userId)) {
+                return res.status(400).json({ message: "User already downvoted this post." });
+            }
+
+            // Perform update if user hasn't voted
+            const updateParams = {
+                TableName: process.env.DYNAMODB_TABLE,
+                Key: {
+                    postId: Number(postId)
+                },
+                UpdateExpression: "SET upvotes = upvotes - :val, usersVoted = list_append(usersVoted, :userId)",
+                ExpressionAttributeValues: {
+                    ":val": 1,
+                    ":userId": [userId]
+                },
+                ReturnValues: "UPDATED_NEW"
+            };
+
+            const data = await documentClient.update(updateParams).promise();
+            res.status(200).json(data);
+
         } catch (err) {
-            res.status(500).json({ message: err })
+            console.error("Error:", err);
+            res.status(500).json({ message: "Internal Server Error" });
         }
     },
 
@@ -165,8 +196,6 @@ const postController = {
         }
 
         const data = await documentClient.get(params).promise()
-        // console.log(req.body)
-        console.log(data)
         if (data.Item.userId !== userId) {
             return res.status(401).json({ message: "Unauthorized" })
         }

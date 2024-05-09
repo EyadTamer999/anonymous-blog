@@ -33,7 +33,7 @@ export const getAllPosts = async () => {
 export const upvotePost = async (postId) => {
     console.log("Upvote post")
     try {
-        const response = await axios.put(apiURL + "/api/post/upvote/" + postId, { data: { userId } })
+        const response = await axios.put(apiURL + "/api/post/upvote/" + postId, { userId })
         return response.data
     } catch (err) {
         console.log(err)
@@ -43,7 +43,7 @@ export const upvotePost = async (postId) => {
 export const downvotePost = async (postId) => {
     console.log("Downvote post")
     try {
-        const response = await axios.put(apiURL + "/api/post/downvote/" + postId, { data: { userId } })
+        const response = await axios.put(apiURL + "/api/post/downvote/" + postId, { userId })
         return response.data
     } catch (err) {
         console.log(err)
