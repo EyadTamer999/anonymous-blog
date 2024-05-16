@@ -1,7 +1,5 @@
 const s3 = require('../Services/awsServices').s3
 const documentClient = require('../Services/awsServices').documentClient
-const lambda = require('../Services/awsServices').lambda
-const sizeOf = require('image-size')
 
 
 // Function to upload image to S3 bucket
@@ -68,26 +66,9 @@ const postController = {
 
         const postId = Number(Date.now().toString())
 
-        //check image size
-        const dimensions = sizeOf(img.data)
-        if (dimensions.width > 1000 || dimensions.height > 1000) {
-            //call the lambda function to resize the image
-            const params = {
-                FunctionName: process.env.LAMBDA_FUNCTION_NAME,
-                Payload: JSON.stringify({ img: img.data, postId: postId })
-            }
 
-            try {
-                const data = await lambda.invoke(params).promise()
-                img.data = data.Payload
-            } catch (err) {
-                res.status(500).json({ message: err })
-            }
-        }
-        else {
-            //push the image to S3 bucket and get URL
-            const imgUrl = await uploadToS3(img, postId);
-        }
+        //push the image to S3 bucket and get URL
+        const imgUrl = await uploadToS3(img, postId);
 
         // get the current date
         const date = new Date().toISOString()
