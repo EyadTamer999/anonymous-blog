@@ -14,4 +14,8 @@ const s3 = new AWS.S3();
 // create DynamoDB instance
 const documentClient = new AWS.DynamoDB.DocumentClient();
 
-module.exports = { s3, documentClient }
+// create lambda instance
+const lambda = new AWS.Lambda();
+
+
+module.exports = { s3, documentClient, lambda }
