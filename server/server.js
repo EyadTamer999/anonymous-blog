@@ -13,7 +13,7 @@ const postRouter = require("./routes/postRoutes")
 // CORS options
 //allow frontend to access the backend
 const corsOptions = {
-    origin: ["http://34.207.114.136:3000", "http://anonymous-blog-alb-1425231859.us-east-1.elb.amazonaws.com", "https://d30ltoy5jfdxlq.cloudfront.net"],
+    origin: ["http://34.207.114.136:3000", "http://anonymous-blog-alb-1425231859.us-east-1.elb.amazonaws.com", "http://d30ltoy5jfdxlq.cloudfront.net"],
 }
 
 // Create an instance of the express app
